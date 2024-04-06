@@ -1,0 +1,108 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services" version "4.4.0" apply false
+}
+
+def localProperties = new Properties()
+
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+android {
+    compileSdkVersion flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
+    ndkVersion "26.1.10909125"
+    compileSdk 34
+    namespace "com.example.team_app"
+
+
+    android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+        }
+
+        lint {
+            baseline file("lint-baseline.xml")
+        }
+
+        lintOptions {
+            warningsAsErrors true
+            checkOnly 'Deprecation'
+        }
+
+    }
+
+    configurations.configureEach {
+        resolutionStrategy {
+            force 'org.mockito:mockito-core:5.8.0'
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.team_app"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        // Set the minimum SDK version here
+        minSdkVersion 21
+        compileSdkVersion 34
+        targetSdkVersion 34
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    flutter {
+        source '../..'
+    }
+
+    dependencies {
+        // Add Firebase dependencies here
+        implementation platform("com.google.firebase:firebase-bom:32.7.1")
+        implementation 'com.google.firebase:firebase-analytics'
+        // Import the BoM for the Firebase platform
+
+        // Add the dependency for the Firebase Authentication library
+        // When using the BoM, you don't specify versions in Firebase library dependencies
+        implementation("com.google.firebase:firebase-auth")
+
+        // Also add the dependency for the Google Play services library and specify its version
+        implementation("com.google.android.gms:play-services-auth:21.0.0")
+        // Add your other dependencies here
+        // ...
+    }
+}

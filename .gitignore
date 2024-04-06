@@ -1,0 +1,7 @@
+# Project exclude paths
+/.dart_tool/
+/.gradle/
+/app/build/
+/app/build/classes/java/main/
+/app/build/classes/java/test/
+/build/

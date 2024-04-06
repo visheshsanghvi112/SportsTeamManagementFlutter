@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "881093348947",
+    "firebase_url": "https://teamapp-da9d9-default-rtdb.firebaseio.com",
+    "project_id": "teamapp-da9d9",
+    "storage_bucket": "teamapp-da9d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881093348947:android:8392bb808757421b3980a6",
+        "android_client_info": {
+          "package_name": "com.example.team_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhEpO-i0HvCHnh6k1GcRqmhqW4_7SyE8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,238 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:html' as html;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  File? _image;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _heightController = TextEditingController();
+  TextEditingController _weightController = TextEditingController();
+  TextEditingController _sportController = TextEditingController();
+  TextEditingController _achievementsController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      final userDoc = await _firestore.collection('profile').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        setState(() {
+          _nameController.text = userData['name'] ?? '';
+          _heightController.text = userData['height'] ?? '';
+          _weightController.text = userData['weight'] ?? '';
+          _sportController.text = userData['sport'] ?? '';
+          _achievementsController.text = userData['achievements'] ?? '';
+          _achievementsController.text = userData['location'] ?? '';
+        });
+      }
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image != null) {
+      final userId = _auth.currentUser?.uid;
+      if (userId != null) {
+        try {
+          final html.InputElement input = html.InputElement(type: 'file')..accept = 'image/*';
+          input.click();
+          await input.onChange.first;
+          final html.File file = input.files!.first;
+          final Uint8List imageData = await _readFileAsUint8List(file);
+
+          final storageRef = FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
+          await storageRef.putData(imageData);
+
+          final imageUrl = await storageRef.getDownloadURL();
+
+          print('Image uploaded successfully. URL: $imageUrl');
+          await _firestore.collection('profile').doc(userId).set({
+            'profileImageUrl': imageUrl,
+          }, SetOptions(merge: true));
+        } catch (e) {
+          print('Error uploading image: $e');
+        }
+      }
+    }
+  }
+
+  Future<Uint8List> _readFileAsUint8List(html.File file) async {
+    final completer = Completer<Uint8List>();
+    final reader = html.FileReader();
+
+    reader.onLoad.listen((e) {
+      completer.complete(Uint8List.fromList(reader.result as List<int>));
+    });
+
+    reader.onError.listen((e) {
+      completer.completeError('Error reading file: ${reader.error}');
+    });
+
+    reader.readAsArrayBuffer(file);
+    return completer.future;
+  }
+
+  Future<void> _saveUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      try {
+        await _firestore.collection('profile').doc(userId).set({}, SetOptions(merge: true));
+
+        await _firestore.collection('profile').doc(userId).update({
+          'name': _nameController.text,
+          'height': _heightController.text,
+          'weight': _weightController.text,
+          'sport': _sportController.text,
+          'achievements': _achievementsController.text,
+          'location': _achievementsController.text,
+        });
+      } catch (e) {
+        print('Error updating user data: $e');
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Profile"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            buildHeader(),
+            const Divider(),
+            buildProfileDetails(),
+            const Divider(),
+            buildSaveButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return Column(
+      children: [
+        const Text(
+          'Edit Profile',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        const SizedBox(height: 20),
+        CircleAvatar(
+          radius: 60,
+          backgroundImage: _image != null ? _buildImage() : null,
+          child: IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              await _pickImage();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      setState(() {});
+    }
+  }
+
+  ImageProvider<Object> _buildImage() {
+    if (kIsWeb) {
+      return NetworkImage(_image!.path);
+    } else {
+      return FileImage(_image!);
+    }
+  }
+
+  Widget buildProfileDetails() {
+    return Column(
+      children: [
+        buildDetailsRow(title: "Name", valueController: _nameController, hint: 'Enter your name'),
+        buildDetailsRow(title: "Height", valueController: _heightController, hint: 'Enter your height'),
+        buildDetailsRow(title: "Weight", valueController: _weightController, hint: 'Enter your weight'),
+        buildDetailsRow(title: "Sport", valueController: _sportController, hint: 'Enter your sport'),
+        buildDetailsRow(title: "Achievements", valueController: _achievementsController, hint: 'Enter your achievements'),
+        buildDetailsRow(title: "Location", valueController: _achievementsController, hint: 'Enter your Location'),
+
+      ],
+    );
+  }
+
+  Widget buildDetailsRow({required String title, TextEditingController? valueController, required String hint}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextField(
+            controller: valueController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: hint,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSaveButton() {
+    return ElevatedButton(
+      onPressed: _isLoading
+          ? null
+          : () async {
+        await _uploadImage();
+        await _saveUserData();
+        _loadUserData();
+      },
+      child: _isLoading ? const CircularProgressIndicator() : const Text('Save Changes'),
+    );
+  }
+}
