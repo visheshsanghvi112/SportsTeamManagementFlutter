@@ -58,12 +58,12 @@ git clone https://github.com/yourusername/SportsTeamManagementSystem.git
 
 2. Navigate to the project directory:
 
-3. Fetch dependencies using flutter pub get:
+3. Fetch dependencies using : flutter pub get
 
 
 ### Running the project
 1. Ensure that an emulator/device is running or connected to your machine.
-2. Run the project using Flutter:
+2. Run the project using Flutter
 
 
 
