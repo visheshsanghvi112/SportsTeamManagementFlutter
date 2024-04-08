@@ -49,14 +49,21 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference. 
-
-## Additional Screenshots for Sports Team Management App
-![Screenshot 1](screenshots/Screenshot%202024-04-05%20at%2010.11.02%20PM.png)
-![Screenshot 2](screenshots/Screenshot%202024-04-05%20at%2011.07.58%20PM.png)
-![Screenshot 3](screenshots/Screenshot%202024-04-05%20at%2011.08.06%20PM.png)
-![Screenshot 4](screenshots/Screenshot%202024-04-05%20at%2011.08.11%20PM.png)
-![Screenshot 5](screenshots/Screenshot%202024-04-05%20at%2011.08.27%20PM.png)
-![Screenshot 6](screenshots/Screenshot%202024-04-05%20at%2011.08.44%20PM.png)
-![Screenshot 7](screenshots/Screenshot%202024-04-05%20at%2011.08.47%20PM.png)
-
+`
 Feel free to use, modify, and distribute this project! If you have any questions or suggestions, feel free to reach out. Happy coding! 🚀
+
+### Installation
+1. Clone the repository:
+git clone https://github.com/yourusername/SportsTeamManagementSystem.git
+
+2. Navigate to the project directory:
+
+3. Fetch dependencies using flutter pub get:
+
+
+### Running the project
+1. Ensure that an emulator/device is running or connected to your machine.
+2. Run the project using Flutter:
+
+
+
