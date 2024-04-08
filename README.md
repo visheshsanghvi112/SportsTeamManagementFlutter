@@ -10,15 +10,23 @@ Star⭐ the repo if you like what you see 😉.
 
 ## 📸 Screenshots
 
-<img src="screenshots/1.png"/>
+<img src="aboutus.png"/>
 
-| 1 | 2 |
+| About Us | Team |
 |------|-------|
-|<img src="screenshots/2.png" width="400">|<img src="screenshots/3.png" width="400">|
+|<img src="team.png" width="400">|<img src="settings.png" width="400">|
 
-| 3 | 4 |
+| Events | Dashboard |
 |------|-------|
-|<img src="screenshots/4.png" width="400">|<img src="screenshots/5.png" width="400">|
+|<img src="events.png" width="400">|<img src="dashboard.png" width="400">|
+
+| Login1 | Welcome |
+|------|-------|
+|<img src="login1.png" width="400">|<img src="welcome.png" width="400">|
+
+| OTP |
+|------|
+|<img src="otp.png" width="400">|
 
 ## ✨ Requirements
 - Any Operating System (i.e., MacOS X, Linux, Windows)
