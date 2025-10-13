@@ -35,7 +35,7 @@ class _LandingScreenState extends State<LandingScreen> with SingleTickerProvider
   // Function to start the animations and navigate to the welcome page
   void _startAnimation() {
     _controller.forward();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => WelcomePage()),

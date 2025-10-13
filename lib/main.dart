@@ -23,16 +23,21 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    // Initialize Firebase
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  // Initialize Firebase Analytics
-  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    // Initialize Firebase Analytics
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  // Enable analytics collection
-  await analytics.setAnalyticsCollectionEnabled(true);
+    // Enable analytics collection
+    await analytics.setAnalyticsCollectionEnabled(true);
+  } catch (e) {
+    print('Firebase initialization error: $e');
+    // Continue running the app even if Firebase fails
+  }
 
   runApp(
     ChangeNotifierProvider(
@@ -43,7 +48,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData.light(), // Set initial theme to light
           darkTheme: ThemeData.dark(),
           themeMode: ThemeMode.light, // Always use light theme initially
-          initialRoute: '/landingscreen', // Change the initial route to '/login'
+          initialRoute: '/welcome', // Change the initial route to '/login'
           routes: {
             '/login': (context) => const LoginPage(),
             '/welcome': (context) => WelcomePage(),
