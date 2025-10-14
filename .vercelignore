@@ -1,0 +1,49 @@
+# Flutter build artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Platform folders (not needed for web)
+android/
+ios/
+linux/
+macos/
+windows/
+
+# Test and development
+test/
+*.test.dart
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Images and screenshots (documentation)
+*.png
+!web/favicon.png
+!web/icons/*.png
+
+# Gradle files
+gradle/
+gradlew
+gradlew.bat
+gradle.properties
+settings.gradle.kts
+local.properties
+*.jks
+
+# Other
+README.md
+analysis_options.yaml
+pubspec.lock

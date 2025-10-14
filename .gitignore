@@ -5,3 +5,5 @@
 /app/build/classes/java/main/
 /app/build/classes/java/test/
 /build/
+# Allow web build for Vercel deployment
+!/build/web/
