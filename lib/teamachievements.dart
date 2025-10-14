@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 
 class TeamAchievementsPage extends StatelessWidget {
+  final List<String> achievementImages = [
+    'https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621194/pexels-photo-3621194.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621311/pexels-photo-3621311.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621163/pexels-photo-3621163.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/1618200/pexels-photo-1618200.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621225/pexels-photo-3621225.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621078/pexels-photo-3621078.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621161/pexels-photo-3621161.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621227/pexels-photo-3621227.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621196/pexels-photo-3621196.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3621224/pexels-photo-3621224.jpeg?auto=compress&cs=tinysrgb&w=800',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,8 +26,14 @@ class TeamAchievementsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildImageColumn(),
-            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Our Achievements',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
             _buildGrid(),
           ],
         ),
@@ -20,54 +41,42 @@ class TeamAchievementsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildImageColumn() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.black26,
-      ),
-      child: Column(
-        children: [
-          _buildImageRow(1),
-          _buildImageRow(3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImageRow(int index) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            child: Image.network('https://kccollege.edu.in/wp-content/uploads/2024/01/Untitled-design-19.png'),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            child: Image.network('https://kccollege.edu.in/wp-content/uploads/2024/01/Untitled-design-19.png'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGrid() => GridView.extent(
-    maxCrossAxisExtent: 150,
-    padding: const EdgeInsets.all(4),
-    mainAxisSpacing: 4,
-    crossAxisSpacing: 4,
-    children: _buildGridTileList(20), // Increased count to 40
+  Widget _buildGrid() => GridView.builder(
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      childAspectRatio: 1.0,
+    ),
+    padding: const EdgeInsets.all(16),
+    itemCount: achievementImages.length,
     shrinkWrap: true,
+    physics: NeverScrollableScrollPhysics(),
+    itemBuilder: (context, index) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          achievementImages[index],
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.grey[300],
+              child: Icon(Icons.error, color: Colors.red),
+            );
+          },
+        ),
+      );
+    },
   );
-
-  List<Container> _buildGridTileList(int count) {
-    return List.generate(
-      count,
-          (i) => Container(
-        child: Image.network('https://kccollege.edu.in/wp-content/uploads/2024/01/Untitled-design-19.png'),
-      ),
-    );
-  }
 }
