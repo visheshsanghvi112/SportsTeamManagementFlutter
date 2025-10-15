@@ -43,9 +43,21 @@
     };
   </script>
 
+  <script>
+    window.flutterConfiguration = {
+      assetBase: "/",
+    };
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </head>
 <body>
-
+  <script>
+    // Force asset loading
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('flutter_service_worker.js');
+      });
+    }
+  </script>
 </body>
 </html>
